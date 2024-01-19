@@ -3,40 +3,6 @@ import { SignatureConfig, SIG_CONFIG } from "../../constants";
 import Arweave from "arweave";
 import base64url from "base64url";
 
-const isString = (obj: any): boolean => {
-  return Object.prototype.toString.call(obj) === "[object String]"
-    ? true
-    : false;
-};
-
-const checkArPermissions = async (
-  windowArweaveWallet,
-  permissions: string[] | string,
-): Promise<void> => {
-  let existingPermissions: string[] = [];
-  const checkPermissions = isString(permissions)
-    ? [permissions]
-    : (permissions as string[]);
-
-  try {
-    existingPermissions = await windowArweaveWallet.getPermissions();
-  } catch {
-    throw new Error("PLEASE_INSTALL_ARCONNECT");
-  }
-
-  if (checkPermissions.length === 0) {
-    return;
-  }
-
-  if (
-    checkPermissions.some((permission: string) => {
-      return !existingPermissions.includes(permission);
-    })
-  ) {
-    await windowArweaveWallet.connect(checkPermissions as never[]);
-  }
-};
-
 export default class InjectedWebauthSigner implements Signer {
   private signer: any;
   public publicKey: Buffer;
@@ -46,10 +12,11 @@ export default class InjectedWebauthSigner implements Signer {
   readonly signatureType: SignatureConfig = SignatureConfig.WEBAUTH;
 
   // 传递 Everpay 实例，以及 publicKey
-  constructor({ everpay, publicKey, account }: any) {
+  constructor({ everpay, publicKey, account, debug }: any) {
     const sign = {
       everpay,
       account,
+      debug,
       getActivePublicKey: function (): any {
         return publicKey;
       },
@@ -70,19 +37,19 @@ export default class InjectedWebauthSigner implements Signer {
 
   // 签名数据
   async sign(message: Uint8Array): Promise<Uint8Array> {
+    console.log(message, "message");
     if (!this.publicKey) {
       await this.setPublicKey();
     }
     console.log(123123123);
     try {
-      const { sig } = this.signer.everpay.signMessageAsync(
-        { isSmartAccount: true, debug: true, account: this.signer.account },
-        message,
+      const { sig } = await this.signer.everpay.signMessageAsync(
+        { isSmartAccount: true, debug: this.signer.debug, account: this.signer.account },
+        encodeURIComponent(message.toString()),
       );
       console.log(sig, "sig");
-      const buf = new Uint8Array(sig);
-      console.log(buf, "buf");
-      return buf;
+      // message.set(sig)
+      return Buffer.from(message);
     } catch {
       throw new Error("SIGNATURE_FAILED");
     }

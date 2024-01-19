@@ -1,6 +1,6 @@
 {
-  "name": "arseeding-arbundles",
-  "version": "0.6.27",
+  "name": "arbundles-fido",
+  "version": "0.0.18",
   "description": "Arweave bundling library",
   "author": "Josh Benaron <joshbenaron@gmail.com>",
   "license": "Apache-2.0",
@@ -21,6 +21,7 @@
     "file/**/*.d.ts"
   ],
   "scripts": {
+
     "build": "tsc",
     "lint": "eslint ./src -c ./.eslintrc.json --ext .ts,.tsx",
     "test": "jest --coverage",

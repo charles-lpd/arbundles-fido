@@ -34,8 +34,8 @@ export const SIG_CONFIG: Record<SignatureConfig, SignatureMeta> = {
     sigName: "solana",
   },
   [SignatureConfig.WEBAUTH]: {
-    sigLength: 1024,
-    pubLength: 1024,
+    sigLength: 429,
+    pubLength: 429,
     sigName: "fido2",
   },
 };

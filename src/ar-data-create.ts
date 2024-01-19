@@ -51,6 +51,7 @@ export function createData(
   // bytes.set(EMPTY_ARRAY, 32);
   // Push bytes for `owner`
 
+  //  原 ==  改为 <=
   assert(
     _owner.byteLength == signer.ownerLength,
     new Error(
