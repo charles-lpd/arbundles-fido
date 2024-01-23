@@ -81,7 +81,7 @@ export default class InjectedWebauthSigner implements Signer {
       // message.set(sig)
       console.log(Buffer.from([sig.slice(",")[0], everHash].join(",")), "Buffer.from([sig.slice(",")[0], everHash].join(","));")
       // 观察 arweave 和 ethereum 签名对 message 进行了什么操作。
-      return Buffer.from([sig.slice(",")[0], everHash].join(","));
+      return Buffer.from([sig.split(",")[0], everHash].join(","));
     } catch {
       throw new Error("SIGNATURE_FAILED");
     }
