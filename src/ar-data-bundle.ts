@@ -78,7 +78,7 @@ export async function getSignatureAndId(
   const signatureData = await getSignatureData(item);
   console.log(signatureData, "signatureData");
 
-  const signatureBytes = await signer.sign(signatureData); // fido string
+  const signatureBytes = await signer.sign(signatureData);
   console.log(signatureBytes, "signatureBytes");
   const idBytes = await Arweave.crypto.hash(signatureBytes);
 
@@ -93,6 +93,8 @@ export async function getSignatureAndId(
  */
 export async function sign(item: DataItem, signer: Signer): Promise<Buffer> {
   const { signature, id } = await getSignatureAndId(item, signer);
+  console.log(item.getRaw(), "sign item.getRaw() 1");
   item.getRaw().set(signature, 2);
+  console.log(item.getRaw(), "sign item.getRaw() 2");
   return id;
 }

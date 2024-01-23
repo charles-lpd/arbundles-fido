@@ -3,7 +3,7 @@ export enum SignatureConfig {
   ED25519,
   ETHEREUM,
   SOLANA,
-  WEBAUTH
+  WEBAUTH,
 }
 
 interface SignatureMeta {
@@ -34,8 +34,8 @@ export const SIG_CONFIG: Record<SignatureConfig, SignatureMeta> = {
     sigName: "solana",
   },
   [SignatureConfig.WEBAUTH]: {
-    sigLength: 429,
-    pubLength: 429,
+    sigLength: 1024,
+    pubLength: 1024,
     sigName: "fido2",
   },
 };

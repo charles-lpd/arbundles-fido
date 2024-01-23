@@ -52,6 +52,7 @@ export function createData(
   // Push bytes for `owner`
 
   //  原 ==  改为 <=
+  console.log(_owner.byteLength, signer.ownerLength);
   assert(
     _owner.byteLength == signer.ownerLength,
     new Error(
@@ -95,6 +96,6 @@ export function createData(
   const data_start = tags_start + tags_length;
 
   bytes.set(_data, data_start);
-
+  console.log(base64url.toBase64(bytes), "base64url.toBase64(bytes)");
   return new DataItem(bytes);
 }

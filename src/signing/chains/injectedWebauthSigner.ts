@@ -32,7 +32,31 @@ export default class InjectedWebauthSigner implements Signer {
     //   throw new Error("ACCESS_PUBLIC_KEY_PERMISSION_NEEDED")
     // }
     const fidoOwner = await this.signer.getActivePublicKey();
-    this.publicKey = base64url.toBuffer(fidoOwner);
+    console.log(fidoOwner, "fidoOwner");
+    // Decode the base64 URL string
+    const decodedString = base64url.decode(fidoOwner as string);
+
+    // Check the length of the decoded string
+    const decodedByteLength = (decodedString as any).byteLength;
+
+    // Create a new buffer with a length of 1024 bytes
+    const paddedBuffer = Buffer.alloc(1024);
+
+    // Copy the decoded string to the padded buffer
+    Buffer.from(decodedString).copy(paddedBuffer);
+
+    // If the decoded byte length is less than 1024, fill the remaining space with zeroes
+    if (decodedByteLength < 1024) {
+      paddedBuffer.fill(0, decodedByteLength);
+    }
+
+    // Log the byte length of the padded buffer
+    console.log(paddedBuffer.byteLength);
+    console.log(
+      base64url.encode(paddedBuffer),
+      "base64url.encode(paddedBuffer)",
+    );
+    this.publicKey = paddedBuffer;
   }
 
   // 签名数据
@@ -43,13 +67,21 @@ export default class InjectedWebauthSigner implements Signer {
     }
     console.log(123123123);
     try {
-      const { sig } = await this.signer.everpay.signMessageAsync(
-        { isSmartAccount: true, debug: this.signer.debug, account: this.signer.account },
-        encodeURIComponent(message.toString()),
+      const decoder = new TextDecoder("utf-8");
+      const { sig, everHash } = await this.signer.everpay.signMessageAsync(
+        {
+          isSmartAccount: true,
+          debug: this.signer.debug,
+          account: this.signer.account,
+        },
+        decoder.decode(message),
       );
       console.log(sig, "sig");
+      console.log(everHash, "everHash");
       // message.set(sig)
-      return Buffer.from(message);
+      console.log(Buffer.from([sig.slice(",")[0], everHash].join(",")), "Buffer.from([sig.slice(",")[0], everHash].join(","));")
+      // 观察 arweave 和 ethereum 签名对 message 进行了什么操作。
+      return Buffer.from([sig.slice(",")[0], everHash].join(","));
     } catch {
       throw new Error("SIGNATURE_FAILED");
     }

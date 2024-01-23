@@ -1,6 +1,6 @@
 {
   "name": "arbundles-fido",
-  "version": "0.0.18",
+  "version": "0.0.27",
   "description": "Arweave bundling library",
   "author": "Josh Benaron <joshbenaron@gmail.com>",
   "license": "Apache-2.0",

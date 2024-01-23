@@ -30,6 +30,11 @@ export default class InjectedEthereumSigner implements Signer {
       await this.setPublicKey();
     }
     const sig = await this.signer.signMessage(message);
+    console.log(sig, "eth sig");
+    console.log(
+      Buffer.from(sig.slice(2), "hex"),
+      "Buffer.from(sig.slice(2), hex);",
+    );
     return Buffer.from(sig.slice(2), "hex");
   }
 

@@ -71,7 +71,9 @@ export default class InjectedArweaveSigner implements Signer {
         message,
         algorithm
       )
+      console.log(signature, "arweave signature")
       const buf = new Uint8Array(Object.values(signature))
+      console.log(buf, "arweave buf")
       return buf
     } catch {
       throw new Error("SIGNATURE_FAILED")
