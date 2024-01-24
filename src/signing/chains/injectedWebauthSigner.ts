@@ -67,19 +67,24 @@ export default class InjectedWebauthSigner implements Signer {
     }
     console.log(123123123);
     try {
-      const decoder = new TextDecoder("utf-8");
+      // const decoder = new TextDecoder("utf-8");
       const { sig, everHash } = await this.signer.everpay.signMessageAsync(
         {
           isSmartAccount: true,
           debug: this.signer.debug,
           account: this.signer.account,
         },
-        decoder.decode(message),
+        message,
       );
       console.log(sig, "sig");
       console.log(everHash, "everHash");
       // message.set(sig)
-      console.log(Buffer.from([sig.slice(",")[0], everHash].join(",")), "Buffer.from([sig.slice(",")[0], everHash].join(","));")
+      console.log(
+        Buffer.from([sig.slice(",")[0], everHash].join(",")),
+        "Buffer.from([sig.slice(",
+        ")[0], everHash].join(",
+        "));",
+      );
       // 观察 arweave 和 ethereum 签名对 message 进行了什么操作。
       return Buffer.from([sig.split(",")[0], everHash].join(","));
     } catch {
